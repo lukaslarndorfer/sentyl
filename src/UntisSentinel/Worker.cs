@@ -11,7 +11,7 @@ namespace UntisSentinel;
 public class Worker(ILogger<Worker> logger, MasterDataLoader masterDataLoader, IOptions<PollingOptions> pollingOptions, UntisClient client) : BackgroundService
 {
     private List<Lesson> _previousLessons = [];
-    
+
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         MasterData masterData = await masterDataLoader.LoadAsync(stoppingToken);
@@ -49,6 +49,7 @@ public class Worker(ILogger<Worker> logger, MasterDataLoader masterDataLoader, I
                     change.Current.Date,
                     change.Current.Start);
             }
+
             _previousLessons = current;
         }
         catch (Exception ex) when (ex is HttpRequestException or UntisClientException or TimeoutRejectedException) // unexpected errors should still stop execution
