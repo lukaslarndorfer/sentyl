@@ -10,12 +10,14 @@ internal static class TestLessons
         IReadOnlyList<int>? teachers = null,
         IReadOnlyList<int>? rooms = null,
         IReadOnlyList<int>? substitutedTeacherIds = null,
-        DateOnly? date = null)
+        DateOnly? date = null,
+        TimeOnly? start = null,
+        TimeOnly? end = null)
         => new(
             Id: id,
             Date: date ?? new DateOnly(2026, 9, 28),
-            Start: new TimeOnly(8, 50),
-            End: new TimeOnly(9, 40),
+            Start: start ?? new TimeOnly(8, 50),
+            End: end ?? new TimeOnly(9, 40),
             Status: status,
             SubstitutedTeacherIds: substitutedTeacherIds ?? [],
             Classes: [],
