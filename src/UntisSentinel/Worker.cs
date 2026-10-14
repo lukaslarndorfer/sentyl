@@ -9,7 +9,9 @@ using UntisSentinel.Untis;
 
 namespace UntisSentinel;
 
-public class Worker(ILogger<Worker> logger, MasterDataLoader masterDataLoader, IOptions<PollingOptions> pollingOptions, UntisClient client) : BackgroundService
+public class Worker(ILogger<Worker> logger, MasterDataLoader masterDataLoader, IOptions<PollingOptions> pollingOptions,
+UntisClient client,
+INotificationSender notificationSender) : BackgroundService
 {
     private List<Lesson> _previousLessons = [];
 
@@ -44,12 +46,7 @@ public class Worker(ILogger<Worker> logger, MasterDataLoader masterDataLoader, I
             IReadOnlyList<LessonChangeGroup> groups = LessonChangeGroup.GroupByDateAndStart(changes);
             foreach (LessonChangeGroup group in groups)
             {
-                logger.LogInformation(
-                    "Lesson changes detected for {Date} at {Start}: {ChangeCount} changes ({ChangeTypes})",
-                    group.Date,
-                    group.Start,
-                    group.Changes.Count,
-                    string.Join(", ", group.Changes.Select(change => change.Type)));
+                await notificationSender.SendAsync(group, cancellationToken);
             }
 
             _previousLessons = current;

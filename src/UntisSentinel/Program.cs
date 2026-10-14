@@ -3,6 +3,7 @@ using System.Net;
 using Microsoft.Extensions.Options;
 
 using UntisSentinel;
+using UntisSentinel.Notifications;
 using UntisSentinel.Untis;
 
 var builder = Host.CreateApplicationBuilder(args);
@@ -31,6 +32,7 @@ builder.Services.AddHttpClient<UntisClient>()
 builder.Services.AddTransient<MasterDataLoader>();
 
 builder.Services.AddHostedService<Worker>();
+builder.Services.AddSingleton<INotificationSender, LoggingNotificationSender>();
 
 var host = builder.Build();
 host.Run();
