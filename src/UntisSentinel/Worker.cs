@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using Polly.Timeout;
 
 using UntisSentinel.ChangeDetection;
+using UntisSentinel.Notifications;
 using UntisSentinel.Timetable;
 using UntisSentinel.Untis;
 
@@ -40,14 +41,15 @@ public class Worker(ILogger<Worker> logger, MasterDataLoader masterDataLoader, I
             logger.LogInformation("Received {Count} lessons", current.Count);
 
             IReadOnlyList<LessonChange> changes = LessonChangeDetector.DetectChanges(_previousLessons, current);
-            foreach (LessonChange change in changes)
+            IReadOnlyList<LessonChangeGroup> groups = LessonChangeGroup.GroupByDateAndStart(changes);
+            foreach (LessonChangeGroup group in groups)
             {
                 logger.LogInformation(
-                    "Detected {ChangeType} for lesson {LessonId} on {Date} at {Start}",
-                    change.Type,
-                    change.Current.Id,
-                    change.Current.Date,
-                    change.Current.Start);
+                    "Lesson changes detected for {Date} at {Start}: {ChangeCount} changes ({ChangeTypes})",
+                    group.Date,
+                    group.Start,
+                    group.Changes.Count,
+                    string.Join(", ", group.Changes.Select(change => change.Type)));
             }
 
             _previousLessons = current;
