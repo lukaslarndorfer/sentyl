@@ -1,6 +1,7 @@
 namespace UntisSentinel.Notifications;
 
-public class LoggingNotificationSender(ILogger<LoggingNotificationSender> logger) : INotificationSender
+public class LoggingNotificationSender(
+    ILogger<LoggingNotificationSender> logger) : INotificationSender
 {
     public Task SendAsync(LessonChangeGroup group, CancellationToken cancellationToken)
     {
