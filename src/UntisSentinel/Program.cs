@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 
 using UntisSentinel;
 using UntisSentinel.Notifications;
+using UntisSentinel.Timetable;
 using UntisSentinel.Untis;
 
 var builder = Host.CreateApplicationBuilder(args);
@@ -33,6 +34,8 @@ builder.Services.AddTransient<MasterDataLoader>();
 
 builder.Services.AddHostedService<Worker>();
 builder.Services.AddSingleton<INotificationSender, LoggingNotificationSender>();
+builder.Services.AddSingleton<ITimetableStateStore, InMemoryTimetableStateStore>();
+builder.Services.AddTransient<TimetablePoller>();
 
 var host = builder.Build();
 host.Run();
