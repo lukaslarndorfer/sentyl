@@ -97,6 +97,59 @@ public class TimetablePollerTests
         var group = notificationSender.SentGroups.Should().ContainSingle().Subject;
         var change = group.Changes.Should().ContainSingle().Subject;
         change.Type.Should().Be(LessonChangeType.Cancelled);
+    }
 
+    [Fact]
+    public async Task PollOnceAsync_WhenNotificationFails_DoesNotSaveNewState()
+    {
+        TimetableEntry regularEntry = new(
+            Id: 1,
+            Date: 20261019,
+            StartTime: 800,
+            EndTime: 850,
+            Code: null,
+            ActivityType: "Unterricht",
+            Classes: [new ElementRef(3065, null)],
+            Teachers: [new ElementRef(14, null)],
+            Subjects: [new ElementRef(35, null)],
+            Rooms: [new ElementRef(42, null)]);
+
+        TimetableEntry cancelledEntry = new(
+            Id: 1,
+            Date: 20261019,
+            StartTime: 800,
+            EndTime: 850,
+            Code: "cancelled",
+            ActivityType: "Unterricht",
+            Classes: [new ElementRef(3065, null)],
+            Teachers: [new ElementRef(14, null)],
+            Subjects: [new ElementRef(35, null)],
+            Rooms: [new ElementRef(42, null)]);
+
+        InMemoryTimetableStateStore timetableStateStore = new();
+        RecordingNotificationSender notificationSender = new()
+        {
+            ThrowOnSend = true
+        };
+        IOptions<PollingOptions> pollingOptions = Options.Create(new PollingOptions());
+        FakeTimetableProvider timetableProvider = new(
+            [cancelledEntry]);
+
+        TimetablePoller timetablePoller = new(
+            NullLogger<TimetablePoller>.Instance,
+            pollingOptions,
+            timetableStateStore,
+            timetableProvider,
+            notificationSender);
+
+        await timetableStateStore.SaveAsync(
+            [regularEntry.ToLesson()],
+            CancellationToken.None);
+        await Assert.ThrowsAsync<InvalidOperationException>(
+            () => timetablePoller.PollOnceAsync(CancellationToken.None));
+
+        // previous state must remain unchanged when notification sending fails
+        var stored = await timetableStateStore.LoadAsync(CancellationToken.None);
+        stored.Should().ContainSingle().Subject.Status.Should().Be(LessonStatus.Regular);
     }
 }
