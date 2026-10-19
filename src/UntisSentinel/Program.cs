@@ -31,6 +31,7 @@ builder.Services.AddHttpClient<UntisClient>()
     .AddStandardResilienceHandler();
 
 builder.Services.AddTransient<MasterDataLoader>();
+builder.Services.AddSingleton<ITimetableProvider, UntisClient>();
 
 builder.Services.AddHostedService<Worker>();
 builder.Services.AddSingleton<INotificationSender, LoggingNotificationSender>();

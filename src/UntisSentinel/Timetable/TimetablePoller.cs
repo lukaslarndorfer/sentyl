@@ -12,7 +12,7 @@ public sealed class TimetablePoller(
     ILogger<TimetablePoller> logger,
     IOptions<PollingOptions> pollingOptions,
     ITimetableStateStore timetableStateStore,
-    UntisClient client,
+    ITimetableProvider client,
     INotificationSender notificationSender)
 {
     public async Task PollOnceAsync(CancellationToken cancellationToken)
@@ -20,7 +20,7 @@ public sealed class TimetablePoller(
         try
         {
             var previousLessons = await timetableStateStore.LoadAsync(cancellationToken) ?? [];
-    
+
             DateOnly today = DateOnly.FromDateTime(DateTime.Now);
             DateOnly start = today;
             DateOnly end = today.AddDays(pollingOptions.Value.DaysToFetch - 1);
