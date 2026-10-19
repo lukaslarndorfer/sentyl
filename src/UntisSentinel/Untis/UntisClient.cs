@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 
 namespace UntisSentinel.Untis;
 
-public sealed class UntisClient
+public sealed class UntisClient : ITimetableProvider
 {
     private const int NotAuthenticatedCode = -8520;
     private readonly HttpClient _httpClient;
