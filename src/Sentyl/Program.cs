@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 
 using Sentyl;
 using Sentyl.Notifications;
+using Sentyl.Notifications.Discord;
 using Sentyl.Timetable;
 using Sentyl.Untis;
 
@@ -19,6 +20,12 @@ builder.Services
 builder.Services
     .AddOptions<PollingOptions>()
     .BindConfiguration(PollingOptions.SectionName)
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+
+builder.Services
+    .AddOptions<DiscordOptions>()
+    .BindConfiguration(DiscordOptions.SectionName)
     .ValidateDataAnnotations()
     .ValidateOnStart();
 
