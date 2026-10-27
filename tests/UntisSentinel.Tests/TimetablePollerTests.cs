@@ -114,23 +114,10 @@ public class TimetablePollerTests
             Subjects: [new ElementRef(35, null)],
             Rooms: [new ElementRef(42, null)]);
 
-        TimetableEntry cancelledEntry = new(
-            Id: 1,
-            Date: 20261019,
-            StartTime: 800,
-            EndTime: 850,
-            Code: "cancelled",
-            ActivityType: "Unterricht",
-            Classes: [new ElementRef(3065, null)],
-            Teachers: [new ElementRef(14, null)],
-            Subjects: [new ElementRef(35, null)],
-            Rooms: [new ElementRef(42, null)]);
+        TimetableEntry cancelledEntry = regularEntry with { Code = "cancelled" };
 
         InMemoryTimetableStateStore timetableStateStore = new();
-        RecordingNotificationSender notificationSender = new()
-        {
-            ThrowOnSend = true
-        };
+        ThrowingNotificationSender notificationSender = new();
         IOptions<PollingOptions> pollingOptions = Options.Create(new PollingOptions());
         FakeTimetableProvider timetableProvider = new(
             [cancelledEntry]);
