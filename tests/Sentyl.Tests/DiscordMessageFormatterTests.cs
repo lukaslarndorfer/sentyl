@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 using AwesomeAssertions;
 
 using Sentyl.ChangeDetection;
@@ -18,6 +20,7 @@ public class DiscordMessageFormatterTests
     private readonly Room _room = new(1, "P-1", "Physiksaal-1");
     private readonly Room _newRoom = new(2, "P-2", "Physiksaal-2");
     private readonly DiscordMessageFormatter _formatter;
+    public static TheoryData<LessonChangeType> AllChangeTypes => new(Enum.GetValues<LessonChangeType>());
 
     public DiscordMessageFormatterTests()
     {
@@ -109,6 +112,67 @@ public class DiscordMessageFormatterTests
         var result = FormatChange(LessonChangeType.BecameIrregular, previousLesson, currentLesson);
 
         result.Should().Contain($"{_subject.Abbreviation} findet außerplanmäßig statt!");
+    }
+
+    [Fact]
+    public void Format_UnknownId_ReturnsQuestionMark()
+    {
+        Lesson lesson = TestLessons.Create(teachers: [99], subjects: [_subject.Id], rooms: [_room.Id]);
+
+        var result = FormatChange(LessonChangeType.Cancelled, lesson, lesson);
+
+        result.Should().Contain($"{_subject.Abbreviation} (?) entfällt!"); // question mark = missing value
+    }
+
+    [Fact]
+    public void Format_NoId_ReturnsDash()
+    {
+        Lesson lesson = TestLessons.Create(subjects: [_subject.Id], rooms: [_room.Id]);
+
+        var result = FormatChange(LessonChangeType.Cancelled, lesson, lesson);
+
+        result.Should().Contain($"{_subject.Abbreviation} (-) entfällt!"); // dash = empty list
+    }
+
+    [Fact]
+    public void Format_MultipleTeachers_ReturnsMultipleTeachers()
+    {
+        Lesson lesson = TestLessons.Create(teachers: [_teacher.Id, _firstSubstitute.Id], subjects: [_subject.Id], rooms: [_room.Id]);
+
+        var result = FormatChange(LessonChangeType.Cancelled, lesson, lesson);
+
+        result.Should().Contain($"{_subject.Abbreviation} (JODO, JADO) entfällt!");
+    }
+
+    [Fact]
+    public void Format_MissingPrevious_ThrowsInvalidOperationException()
+    {
+        Lesson lesson = TestLessons.Create(teachers: [_teacher.Id], subjects: [_subject.Id], rooms: [_room.Id]);
+
+        Action act = () => FormatChange(LessonChangeType.TeacherSubstitutionChanged, null, lesson);
+
+        act.Should().Throw<InvalidOperationException>();
+    }
+
+    [Fact]
+    public void Format_Cancelled_ContainsCorrectHeading()
+    {
+        Lesson lesson = TestLessons.Create(teachers: [_teacher.Id], subjects: [_subject.Id], rooms: [_room.Id]);
+
+        var result = FormatChange(LessonChangeType.Cancelled, lesson, lesson);
+
+        result.Should().Contain("**Mo 28.09. – 08:50**"); // default value from TestLessons
+    }
+
+    [Theory]
+    [MemberData(nameof(AllChangeTypes))]
+    public void Format_AllChangeTypes_DoesNotThrow(LessonChangeType type)
+    {
+        Lesson lesson = TestLessons.Create(teachers: [_teacher.Id], subjects: [_subject.Id], rooms: [_room.Id]);
+
+        var result = FormatChange(type, lesson, lesson);
+
+        result.Should().NotBeNullOrWhiteSpace();
     }
 
     // builds a group with a single change and formats it
