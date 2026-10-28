@@ -33,7 +33,7 @@ public sealed class DiscordNotificationSender(
         return isPing ? $"@everyone\n{message}" : message;
     }
 
-    private static AllowedMentionsProperties BuildAllowedMentions(LessonChangeGroup group, bool isPing)
+    private static AllowedMentionsProperties BuildAllowedMentions(bool isPing)
     {
         return isPing ? AllowedMentionsProperties.None.WithEveryone(true) : AllowedMentionsProperties.None;
     }
