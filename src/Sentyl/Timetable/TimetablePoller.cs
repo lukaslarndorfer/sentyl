@@ -1,5 +1,7 @@
 using Microsoft.Extensions.Options;
 
+using NetCord.Rest;
+
 using Polly.Timeout;
 
 using Sentyl.ChangeDetection;
@@ -40,7 +42,7 @@ public sealed class TimetablePoller(
 
             await timetableStateStore.SaveAsync(current, cancellationToken);
         }
-        catch (Exception ex) when (ex is HttpRequestException or UntisClientException or TimeoutRejectedException) // unexpected errors should still stop execution
+        catch (Exception ex) when (ex is HttpRequestException or UntisClientException or TimeoutRejectedException or RestException) // unexpected errors should still stop execution
         {
             logger.LogError(ex, "Failed to poll timetable, skipping this iteration");
         }
