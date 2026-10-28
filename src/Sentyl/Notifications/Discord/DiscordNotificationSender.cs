@@ -13,23 +13,28 @@ public sealed class DiscordNotificationSender(
 {
     public async Task SendAsync(LessonChangeGroup group, CancellationToken cancellationToken)
     {
+        bool isPing = group.Severity == NotificationSeverity.Ping;
         MasterData masterData = await masterDataProvider.GetAsync(cancellationToken);
 
         using var webhookClient = new WebhookClient(ulong.Parse(options.Value.WebhookId), options.Value.WebhookToken);
 
         await webhookClient.ExecuteAsync(new WebhookMessageProperties
         {
-            Content = BuildContent(group, masterData)
+            Content = BuildContent(group, masterData, isPing),
+            AllowedMentions = BuildAllowedMentions(group, isPing)
         }, cancellationToken: cancellationToken);
     }
 
-    private static string BuildContent(LessonChangeGroup group, MasterData masterData)
+    private static string BuildContent(LessonChangeGroup group, MasterData masterData, bool isPing)
     {
         DiscordMessageFormatter formatter = new(masterData);
         string message = formatter.Format(group);
 
-        return group.Severity == NotificationSeverity.Ping
-            ? $"@everyone\n{message}"
-            : message;
+        return isPing ? $"@everyone\n{message}" : message;
+    }
+
+    private static AllowedMentionsProperties BuildAllowedMentions(LessonChangeGroup group, bool isPing)
+    {
+        return isPing ? AllowedMentionsProperties.None.WithEveryone(true) : AllowedMentionsProperties.None;
     }
 }
