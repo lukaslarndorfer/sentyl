@@ -10,6 +10,7 @@ internal static class TestLessons
         IReadOnlyList<int>? teachers = null,
         IReadOnlyList<int>? rooms = null,
         IReadOnlyList<int>? substitutedTeacherIds = null,
+        IReadOnlyList<int>? subjects = null,
         DateOnly? date = null,
         TimeOnly? start = null,
         TimeOnly? end = null)
@@ -22,7 +23,7 @@ internal static class TestLessons
             SubstitutedTeacherIds: substitutedTeacherIds ?? [],
             Classes: [],
             Teachers: teachers ?? [],
-            Subjects: [],
+            Subjects: subjects ?? [],
             Rooms: rooms ?? []);
 
 }
