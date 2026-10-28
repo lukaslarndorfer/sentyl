@@ -21,7 +21,7 @@ public sealed class DiscordNotificationSender(
         await webhookClient.ExecuteAsync(new WebhookMessageProperties
         {
             Content = BuildContent(group, masterData, isPing),
-            AllowedMentions = BuildAllowedMentions(group, isPing)
+            AllowedMentions = BuildAllowedMentions(isPing)
         }, cancellationToken: cancellationToken);
     }
 
