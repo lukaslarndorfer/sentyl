@@ -1,5 +1,7 @@
 using AwesomeAssertions;
 
+using Microsoft.Extensions.Time.Testing;
+
 using Sentyl.ChangeDetection;
 using Sentyl.Notifications;
 using Sentyl.Tests.Helpers;
@@ -21,7 +23,7 @@ public class LessonChangeGroupTests
         Lesson currentSecond = TestLessons.Create(id: 124, rooms: [5]);
 
         IReadOnlyList<LessonChange> changes = LessonChangeDetector.DetectChanges([firstLesson, secondLesson], [currentFirst, currentSecond]);
-        var grouped = LessonChangeGroup.GroupByDateAndStart(changes);
+        var grouped = LessonChangeGroup.GroupByDateAndStart(changes, new FakeTimeProvider());
 
         grouped.Count.Should().Be(1);
         grouped[0].Changes.Count.Should().Be(2);
@@ -40,7 +42,7 @@ public class LessonChangeGroupTests
         Lesson currentSecond = TestLessons.Create(id: 124, rooms: [5], start: laterStart, end: laterEnd);
 
         IReadOnlyList<LessonChange> changes = LessonChangeDetector.DetectChanges([firstLesson, secondLesson], [currentFirst, currentSecond]);
-        var grouped = LessonChangeGroup.GroupByDateAndStart(changes);
+        var grouped = LessonChangeGroup.GroupByDateAndStart(changes, new FakeTimeProvider());
 
         grouped.Should().HaveCount(2);
         grouped[0].Changes.Should().ContainSingle().Which.Current.Id.Should().Be(123); // sorting by time

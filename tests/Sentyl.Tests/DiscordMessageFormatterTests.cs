@@ -179,7 +179,7 @@ public class DiscordMessageFormatterTests
     private string FormatChange(LessonChangeType type, Lesson? previous, Lesson current)
     {
         LessonChange change = new(type, previous, current);
-        LessonChangeGroup group = new(current.Date, current.Start, [change]);
+        LessonChangeGroup group = new(current.Date, current.Start, [change], NotificationSeverity.Info);
 
         return _formatter.Format(group);
     }

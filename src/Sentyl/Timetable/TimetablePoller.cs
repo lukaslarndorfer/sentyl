@@ -13,7 +13,8 @@ public sealed class TimetablePoller(
     IOptions<PollingOptions> pollingOptions,
     ITimetableStateStore timetableStateStore,
     ITimetableProvider client,
-    INotificationSender notificationSender)
+    INotificationSender notificationSender,
+    TimeProvider timeProvider)
 {
     public async Task PollOnceAsync(CancellationToken cancellationToken)
     {
@@ -31,7 +32,7 @@ public sealed class TimetablePoller(
             logger.LogInformation("Received {Count} lessons", current.Count);
 
             IReadOnlyList<LessonChange> changes = LessonChangeDetector.DetectChanges(previousLessons, current);
-            IReadOnlyList<LessonChangeGroup> groups = LessonChangeGroup.GroupByDateAndStart(changes);
+            IReadOnlyList<LessonChangeGroup> groups = LessonChangeGroup.GroupByDateAndStart(changes, timeProvider);
             foreach (LessonChangeGroup group in groups)
             {
                 await notificationSender.SendAsync(group, cancellationToken);

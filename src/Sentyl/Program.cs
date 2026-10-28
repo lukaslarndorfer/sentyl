@@ -44,6 +44,7 @@ builder.Services.AddSingleton<ITimetableProvider, UntisClient>();
 builder.Services.AddSingleton<INotificationSender, LoggingNotificationSender>();
 builder.Services.AddSingleton<ITimetableStateStore, InMemoryTimetableStateStore>();
 builder.Services.AddSingleton<MasterDataProvider>();
+builder.Services.AddSingleton(TimeProvider.System);
 
 builder.Services.AddHostedService<Worker>();
 

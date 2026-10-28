@@ -2,6 +2,7 @@ using AwesomeAssertions;
 
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Time.Testing;
 
 using Sentyl.ChangeDetection;
 using Sentyl.Tests.Helpers;
@@ -39,7 +40,8 @@ public class TimetablePollerTests
             pollingOptions,
             timetableStateStore,
             timetableProvider,
-            notificationSender);
+            notificationSender,
+            new FakeTimeProvider());
 
         await timetablePoller.PollOnceAsync(CancellationToken.None);
         var stored = await timetableStateStore.LoadAsync(CancellationToken.None);
@@ -87,7 +89,8 @@ public class TimetablePollerTests
             pollingOptions,
             timetableStateStore,
             timetableProvider,
-            notificationSender);
+            notificationSender,
+            new FakeTimeProvider());
 
         await timetableStateStore.SaveAsync(
             [regularEntry.ToLesson()],
@@ -127,7 +130,8 @@ public class TimetablePollerTests
             pollingOptions,
             timetableStateStore,
             timetableProvider,
-            notificationSender);
+            notificationSender,
+            new FakeTimeProvider());
 
         await timetableStateStore.SaveAsync(
             [regularEntry.ToLesson()],
