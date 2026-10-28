@@ -38,12 +38,14 @@ builder.Services.AddHttpClient<UntisClient>()
     .AddStandardResilienceHandler();
 
 builder.Services.AddTransient<MasterDataLoader>();
-builder.Services.AddSingleton<ITimetableProvider, UntisClient>();
+builder.Services.AddTransient<TimetablePoller>();
 
-builder.Services.AddHostedService<Worker>();
+builder.Services.AddSingleton<ITimetableProvider, UntisClient>();
 builder.Services.AddSingleton<INotificationSender, LoggingNotificationSender>();
 builder.Services.AddSingleton<ITimetableStateStore, InMemoryTimetableStateStore>();
-builder.Services.AddTransient<TimetablePoller>();
+builder.Services.AddSingleton<MasterDataProvider>();
+
+builder.Services.AddHostedService<Worker>();
 
 var host = builder.Build();
 host.Run();
