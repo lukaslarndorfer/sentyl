@@ -6,5 +6,6 @@ public sealed class DiscordOptions
 {
     public const string SectionName = "Discord";
 
-    [Required] public string WebhookUrl { get; set; } = "";
+    [Required] public string WebhookId { get; set; } = "";
+    [Required] public string WebhookToken { get; set; } = "";
 }
