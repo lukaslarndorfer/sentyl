@@ -41,13 +41,15 @@ builder.Services.AddSingleton(serviceProvider =>
 {
     UntisOptions options = serviceProvider.GetRequiredService<IOptions<UntisOptions>>().Value;
 
-    return new UntisCredentials(options.Host, options.School, options.User, options.Password);
+    return UntisCredentials.Create(options.Host, options.School, options.User, options.Password);
 });
 
 builder.Services.AddHttpClient<UntisClient>()
        .ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler
        {
            UseCookies = false,
+           // the session cookie is set manually, so a redirect must never forward it to another host
+           AllowAutoRedirect = false
        })
        .AddStandardResilienceHandler();
 
