@@ -3551,3 +3551,6 @@ resharper_zero_index_from_end_highlighting = warning
 indent_style = space
 indent_size = 4
 tab_width = 4
+
+[**/Migrations/*.cs]
+generated_code = true
