@@ -1,11 +1,7 @@
-using System.Net;
-
 using Microsoft.Extensions.Options;
-
 using NetCord.Hosting.Gateway;
 using NetCord.Hosting.Services;
 using NetCord.Hosting.Services.ApplicationCommands;
-
 using Sentyl;
 using Sentyl.Discord;
 using Sentyl.Discord.Notifications;
@@ -15,39 +11,45 @@ using Sentyl.Timetable;
 using Sentyl.Untis;
 
 var builder = Host.CreateApplicationBuilder(args);
-var cookieContainer = new CookieContainer();
 
 builder.Services
-    .AddOptions<UntisOptions>()
-    .BindConfiguration(UntisOptions.SectionName)
-    .ValidateDataAnnotations()
-    .ValidateOnStart();
+       .AddOptions<UntisOptions>()
+       .BindConfiguration(UntisOptions.SectionName)
+       .ValidateDataAnnotations()
+       .ValidateOnStart();
 
 builder.Services
-    .AddOptions<PollingOptions>()
-    .BindConfiguration(PollingOptions.SectionName)
-    .ValidateDataAnnotations()
-    .ValidateOnStart();
+       .AddOptions<PollingOptions>()
+       .BindConfiguration(PollingOptions.SectionName)
+       .ValidateDataAnnotations()
+       .ValidateOnStart();
 
 builder.Services
-    .AddOptions<DiscordOptions>()
-    .BindConfiguration(DiscordOptions.SectionName)
-    .ValidateDataAnnotations()
-    .ValidateOnStart();
+       .AddOptions<DiscordOptions>()
+       .BindConfiguration(DiscordOptions.SectionName)
+       .ValidateDataAnnotations()
+       .ValidateOnStart();
 
 builder.Services
-    .AddOptions<StorageOptions>()
-    .BindConfiguration(StorageOptions.SectionName)
-    .ValidateDataAnnotations()
-    .ValidateOnStart();
+       .AddOptions<StorageOptions>()
+       .BindConfiguration(StorageOptions.SectionName)
+       .ValidateDataAnnotations()
+       .ValidateOnStart();
+
+// temporary; removed once polling runs per guild
+builder.Services.AddSingleton(serviceProvider =>
+{
+    UntisOptions options = serviceProvider.GetRequiredService<IOptions<UntisOptions>>().Value;
+
+    return new UntisCredentials(options.Host, options.School, options.User, options.Password);
+});
 
 builder.Services.AddHttpClient<UntisClient>()
-    .ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler
-    {
-        UseCookies = true,
-        CookieContainer = cookieContainer
-    })
-    .AddStandardResilienceHandler();
+       .ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler
+       {
+           UseCookies = false,
+       })
+       .AddStandardResilienceHandler();
 
 builder.Services.ConfigurePersistence(builder.Environment.IsDevelopment());
 
