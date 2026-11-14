@@ -1,3 +1,5 @@
+using System.Data.Common;
+
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -37,9 +39,15 @@ public static class PersistenceSetup
 
     public static void ConfigureDatabaseContextOptions(DbContextOptionsBuilder optionsBuilder, string connectionString,
                                                        bool sensitiveDataLogging)
+        => ApplyCommonOptions(optionsBuilder.UseSqlite(connectionString), sensitiveDataLogging);
+
+    public static void ConfigureDatabaseContextOptions(DbContextOptionsBuilder optionsBuilder, DbConnection connection,
+                                                       bool sensitiveDataLogging)
+        => ApplyCommonOptions(optionsBuilder.UseSqlite(connection), sensitiveDataLogging);
+
+    private static void ApplyCommonOptions(DbContextOptionsBuilder optionsBuilder, bool sensitiveDataLogging)
     {
-        optionsBuilder.UseSqlite(connectionString)
-                      .ConfigureWarnings(warnings =>
+        optionsBuilder.ConfigureWarnings(warnings =>
                                              warnings.Throw(RelationalEventId.MultipleCollectionIncludeWarning));
 
         if (sensitiveDataLogging)

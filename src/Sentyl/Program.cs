@@ -51,7 +51,7 @@ builder.Services.AddTransient<TimetablePoller>();
 
 builder.Services.AddSingleton<ITimetableProvider, UntisClient>();
 builder.Services.AddSingleton<INotificationSender, DiscordNotificationSender>();
-builder.Services.AddSingleton<ITimetableStateStore, InMemoryTimetableStateStore>();
+builder.Services.AddSingleton<ITimetableStateStore, DatabaseTimetableStateStore>();
 builder.Services.AddSingleton<MasterDataProvider>();
 builder.Services.AddSingleton(TimeProvider.System);
 

@@ -1,6 +1,5 @@
 using AwesomeAssertions;
 
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 using Sentyl.Persistence;
@@ -14,19 +13,9 @@ public sealed class DatabaseContextTests : IDisposable
     // above long.MaxValue, so the ulong -> long conversion is part of the test
     private const ulong GuildId = 18_000_000_000_000_000_000UL;
 
-    private readonly string _connectionString = $"Data Source=file:{Guid.NewGuid():N}?mode=memory&cache=shared";
-    private readonly SqliteConnection _keepAlive;
+    private readonly SqliteTestDatabase _database = new();
 
-    public DatabaseContextTests()
-    {
-        _keepAlive = new SqliteConnection(_connectionString);
-        _keepAlive.Open();
-
-        using var db = CreateContext();
-        db.Database.EnsureCreated();
-    }
-
-    public void Dispose() => _keepAlive.Dispose();
+    public void Dispose() => _database.Dispose();
 
     [Fact]
     public async ValueTask SaveAndLoad_RoundTripsConfigAndLessons()
@@ -91,12 +80,7 @@ public sealed class DatabaseContextTests : IDisposable
         (await verify.GuildTimetableStates.AnyAsync(TestContext.Current.CancellationToken)).Should().BeFalse();
     }
 
-    private DatabaseContext CreateContext()
-    {
-        var builder = new DbContextOptionsBuilder<DatabaseContext>();
-        PersistenceSetup.ConfigureDatabaseContextOptions(builder, _connectionString, sensitiveDataLogging: true);
-        return new DatabaseContext(builder.Options);
-    }
+    private DatabaseContext CreateContext() => _database.CreateDbContext();
 
     private static GuildConfig CreateConfig() => new()
     {
