@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Sentyl;
+namespace Sentyl.Timetable;
 
 public sealed class PollingOptions
 {
