@@ -67,6 +67,7 @@ builder.Services.AddSingleton<ITimetableStateStore, DatabaseTimetableStateStore>
 builder.Services.AddSingleton<MasterDataProvider>();
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddSingleton<IUntisClientFactory, UntisClientFactory>();
+builder.Services.AddSingleton<IUntisCredentialsValidator, UntisCredentialsValidator>();
 builder.Services.AddSingleton(sp => sp.GetRequiredService<IUntisClientFactory>()
                                       .Create(sp.GetRequiredService<UntisCredentials>()));
 builder.Services.AddSingleton<ITimetableProvider>(sp => sp.GetRequiredService<UntisClient>());
