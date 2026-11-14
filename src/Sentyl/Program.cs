@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Sentyl;
 using Sentyl.Notifications;
 using Sentyl.Notifications.Discord;
+using Sentyl.Persistence;
 using Sentyl.Timetable;
 using Sentyl.Untis;
 
@@ -29,6 +30,12 @@ builder.Services
     .ValidateDataAnnotations()
     .ValidateOnStart();
 
+builder.Services
+    .AddOptions<StorageOptions>()
+    .BindConfiguration(StorageOptions.SectionName)
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+
 builder.Services.AddHttpClient<UntisClient>()
     .ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler
     {
@@ -36,6 +43,8 @@ builder.Services.AddHttpClient<UntisClient>()
         CookieContainer = cookieContainer
     })
     .AddStandardResilienceHandler();
+
+builder.Services.ConfigurePersistence(builder.Environment.IsDevelopment());
 
 builder.Services.AddTransient<MasterDataLoader>();
 builder.Services.AddTransient<TimetablePoller>();
@@ -49,4 +58,6 @@ builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddHostedService<Worker>();
 
 var host = builder.Build();
-host.Run();
+
+await host.MigrateDatabaseAsync();
+await host.RunAsync();
