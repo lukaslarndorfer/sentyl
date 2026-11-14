@@ -3554,3 +3554,6 @@ tab_width = 4
 
 [**/Migrations/*.cs]
 generated_code = true
+
+[*.json]
+indent_size = 2
