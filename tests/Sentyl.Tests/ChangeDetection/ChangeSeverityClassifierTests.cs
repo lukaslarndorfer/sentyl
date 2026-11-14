@@ -6,7 +6,7 @@ using Sentyl.ChangeDetection;
 using Sentyl.Tests.Helpers;
 using Sentyl.Timetable;
 
-namespace Sentyl.Tests;
+namespace Sentyl.Tests.ChangeDetection;
 
 public class ChangeSeverityClassifierTests
 {

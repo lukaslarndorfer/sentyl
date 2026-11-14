@@ -9,7 +9,7 @@ using Sentyl.Timetable;
 
 using Xunit;
 
-namespace Sentyl.Tests;
+namespace Sentyl.Tests.Notifications;
 
 public class LessonChangeGroupTests
 {

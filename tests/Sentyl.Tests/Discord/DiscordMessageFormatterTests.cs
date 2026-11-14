@@ -3,13 +3,13 @@ using System.ComponentModel.DataAnnotations;
 using AwesomeAssertions;
 
 using Sentyl.ChangeDetection;
+using Sentyl.Discord.Notifications;
 using Sentyl.Notifications;
-using Sentyl.Notifications.Discord;
 using Sentyl.Tests.Helpers;
 using Sentyl.Timetable;
 using Sentyl.Untis;
 
-namespace Sentyl.Tests;
+namespace Sentyl.Tests.Discord;
 
 public class DiscordMessageFormatterTests
 {

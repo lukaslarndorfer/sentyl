@@ -3,8 +3,9 @@ using System.Net;
 using Microsoft.Extensions.Options;
 
 using Sentyl;
+using Sentyl.Discord;
+using Sentyl.Discord.Notifications;
 using Sentyl.Notifications;
-using Sentyl.Notifications.Discord;
 using Sentyl.Persistence;
 using Sentyl.Timetable;
 using Sentyl.Untis;

@@ -5,9 +5,10 @@ using NetCord;
 using NetCord.Rest;
 
 using Sentyl.ChangeDetection;
+using Sentyl.Notifications;
 using Sentyl.Untis;
 
-namespace Sentyl.Notifications.Discord;
+namespace Sentyl.Discord.Notifications;
 
 public sealed class DiscordNotificationSender(
     IOptions<DiscordOptions> options,
@@ -18,7 +19,7 @@ public sealed class DiscordNotificationSender(
         bool isPing = group.Severity == NotificationSeverity.Ping;
         MasterData masterData = await masterDataProvider.GetAsync(cancellationToken);
 
-        using var client = new RestClient(new BotToken(options.Value.BotToken));
+        using var client = new RestClient(new BotToken(options.Value.Token));
 
         await client.SendMessageAsync(
         options.Value.ChannelId,

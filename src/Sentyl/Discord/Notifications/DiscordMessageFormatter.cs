@@ -2,10 +2,11 @@ using System.Globalization;
 using System.Text;
 
 using Sentyl.ChangeDetection;
+using Sentyl.Notifications;
 using Sentyl.Timetable;
 using Sentyl.Untis;
 
-namespace Sentyl.Notifications.Discord;
+namespace Sentyl.Discord.Notifications;
 
 public class DiscordMessageFormatter(MasterData masterData)
 {

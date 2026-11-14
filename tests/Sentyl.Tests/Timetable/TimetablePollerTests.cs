@@ -9,7 +9,7 @@ using Sentyl.Tests.Helpers;
 using Sentyl.Timetable;
 using Sentyl.Untis;
 
-namespace Sentyl.Tests;
+namespace Sentyl.Tests.Timetable;
 
 public class TimetablePollerTests
 {

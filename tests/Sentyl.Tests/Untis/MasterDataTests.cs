@@ -2,7 +2,7 @@ using AwesomeAssertions;
 
 using Sentyl.Untis;
 
-namespace Sentyl.Tests;
+namespace Sentyl.Tests.Untis;
 
 
 public class MasterDataTests
