@@ -5,7 +5,6 @@ using Sentyl.Timetable;
 
 namespace Sentyl.Tests.Timetable;
 
-
 public class InMemoryTimetableStateStoreTests
 {
     private const ulong GuildId = 1;
@@ -37,7 +36,6 @@ public class InMemoryTimetableStateStoreTests
     {
         var store = new InMemoryTimetableStateStore();
         await store.SaveAsync(GuildId, [TestLessons.Create(status: LessonStatus.Regular)], CancellationToken.None);
-
 
         await store.SaveAsync(GuildId, [TestLessons.Create(status: LessonStatus.Cancelled)], CancellationToken.None);
 

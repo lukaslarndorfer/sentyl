@@ -7,6 +7,7 @@ using NetCord.Rest;
 using Sentyl.ChangeDetection;
 using Sentyl.Notifications;
 using Sentyl.Untis;
+using Sentyl.Untis.Models;
 
 namespace Sentyl.Discord.Notifications;
 

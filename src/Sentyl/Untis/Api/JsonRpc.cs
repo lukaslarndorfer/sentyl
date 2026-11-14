@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Sentyl.Untis;
+namespace Sentyl.Untis.Api;
 
 // params can vary per request, hence the generic TParams 
 public sealed record JsonRpcRequest<TParams>(

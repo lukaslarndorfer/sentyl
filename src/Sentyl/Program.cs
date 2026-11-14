@@ -9,6 +9,7 @@ using Sentyl.Notifications;
 using Sentyl.Persistence;
 using Sentyl.Timetable;
 using Sentyl.Untis;
+using Sentyl.Untis.Client;
 
 var builder = Host.CreateApplicationBuilder(args);
 

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Sentyl.Untis;
+namespace Sentyl.Untis.Client;
 
 public sealed class UntisOptions
 {

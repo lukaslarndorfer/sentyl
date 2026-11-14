@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Sentyl.Untis;
+namespace Sentyl.Untis.Models;
 
 public sealed record Teacher(int Id,
     [property: JsonPropertyName("foreName")] string FirstName,

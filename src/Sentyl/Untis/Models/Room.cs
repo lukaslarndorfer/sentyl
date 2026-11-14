@@ -1,4 +1,4 @@
-namespace Sentyl.Untis;
+namespace Sentyl.Untis.Models;
 
 public sealed record Room(int Id,
     string Name,

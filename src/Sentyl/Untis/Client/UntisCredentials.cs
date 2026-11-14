@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace Sentyl.Untis;
+namespace Sentyl.Untis.Client;
 
 public sealed record UntisCredentials
 {

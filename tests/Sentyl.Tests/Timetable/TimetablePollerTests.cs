@@ -8,6 +8,7 @@ using Sentyl.ChangeDetection;
 using Sentyl.Tests.Helpers;
 using Sentyl.Timetable;
 using Sentyl.Untis;
+using Sentyl.Untis.Api;
 
 namespace Sentyl.Tests.Timetable;
 

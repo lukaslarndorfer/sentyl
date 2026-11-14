@@ -7,7 +7,7 @@ using Sentyl.Discord.Notifications;
 using Sentyl.Notifications;
 using Sentyl.Tests.Helpers;
 using Sentyl.Timetable;
-using Sentyl.Untis;
+using Sentyl.Untis.Models;
 
 namespace Sentyl.Tests.Discord;
 

@@ -1,5 +1,6 @@
 using AwesomeAssertions;
-using Sentyl.Untis;
+
+using Sentyl.Untis.Client;
 
 namespace Sentyl.Tests.Untis;
 

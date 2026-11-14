@@ -1,7 +1,10 @@
 using System.Net.Http.Json;
 using System.Text.Json;
 
-namespace Sentyl.Untis;
+using Sentyl.Untis.Api;
+using Sentyl.Untis.Models;
+
+namespace Sentyl.Untis.Client;
 
 public sealed class UntisClient : ITimetableProvider
 {

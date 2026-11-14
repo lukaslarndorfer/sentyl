@@ -1,3 +1,5 @@
+using Sentyl.Untis.Api;
+
 namespace Sentyl.Untis;
 
 public interface ITimetableProvider

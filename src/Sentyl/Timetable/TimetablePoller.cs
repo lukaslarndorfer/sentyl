@@ -7,6 +7,8 @@ using Polly.Timeout;
 using Sentyl.ChangeDetection;
 using Sentyl.Notifications;
 using Sentyl.Untis;
+using Sentyl.Untis.Api;
+using Sentyl.Untis.Client;
 
 namespace Sentyl.Timetable;
 

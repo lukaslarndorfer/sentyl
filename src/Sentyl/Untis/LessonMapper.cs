@@ -1,6 +1,8 @@
 using System;
 
 using Sentyl.Timetable;
+using Sentyl.Untis.Api;
+using Sentyl.Untis.Client;
 
 namespace Sentyl.Untis;
 
@@ -28,6 +30,5 @@ public static class LessonMapper
            [.. entry.Rooms.Select(r => r.Id)]
            );
     }
-
 
 }

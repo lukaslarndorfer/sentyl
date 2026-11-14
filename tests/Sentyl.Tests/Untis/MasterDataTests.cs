@@ -1,9 +1,8 @@
 using AwesomeAssertions;
 
-using Sentyl.Untis;
+using Sentyl.Untis.Models;
 
 namespace Sentyl.Tests.Untis;
-
 
 public class MasterDataTests
 {
@@ -32,6 +31,5 @@ public class MasterDataTests
 
         result.Should().BeNull();
     }
-
 
 }

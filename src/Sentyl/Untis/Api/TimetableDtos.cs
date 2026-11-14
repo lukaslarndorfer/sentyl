@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Sentyl.Untis;
+namespace Sentyl.Untis.Api;
 
 public sealed record TimetableParams(TimetableOptions Options);
 

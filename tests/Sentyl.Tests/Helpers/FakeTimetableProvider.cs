@@ -1,4 +1,5 @@
 using Sentyl.Untis;
+using Sentyl.Untis.Api;
 
 namespace Sentyl.Tests.Helpers;
 

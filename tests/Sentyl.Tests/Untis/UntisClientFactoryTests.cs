@@ -2,7 +2,7 @@ using AwesomeAssertions;
 
 using Microsoft.Extensions.DependencyInjection;
 
-using Sentyl.Untis;
+using Sentyl.Untis.Client;
 
 namespace Sentyl.Tests.Untis;
 

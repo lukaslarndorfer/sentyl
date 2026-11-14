@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Frozen;
 
-namespace Sentyl.Untis;
+namespace Sentyl.Untis.Models;
 
 public class MasterData
 {

@@ -1,3 +1,6 @@
+using Sentyl.Untis.Client;
+using Sentyl.Untis.Models;
+
 namespace Sentyl.Untis;
 
 public sealed class MasterDataLoader(

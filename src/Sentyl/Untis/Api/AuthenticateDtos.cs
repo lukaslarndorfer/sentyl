@@ -1,4 +1,4 @@
-namespace Sentyl.Untis;
+namespace Sentyl.Untis.Api;
 
 
 public sealed record AuthenticateParams(

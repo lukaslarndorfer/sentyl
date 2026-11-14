@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Sentyl.Untis;
+namespace Sentyl.Untis.Models;
 
 public sealed record SchoolClass(int Id,
     string Name,
