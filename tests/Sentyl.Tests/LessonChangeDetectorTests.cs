@@ -51,10 +51,10 @@ public class LessonChangeDetectorTests
     [Fact]
     public void DetectChanges_SubstitutionAppears_ReturnsTeacherSubstituted()
     {
-        const int previousTeacherId = 2;
-        const int newTeacherId = 3;
-        var previous = TestLessons.Create(teachers: [previousTeacherId]);
-        var current = TestLessons.Create(teachers: [newTeacherId], substitutedTeacherIds: [previousTeacherId]);
+        const int PreviousTeacherId = 2;
+        const int NewTeacherId = 3;
+        var previous = TestLessons.Create(teachers: [PreviousTeacherId]);
+        var current = TestLessons.Create(teachers: [NewTeacherId], substitutedTeacherIds: [PreviousTeacherId]);
 
         IReadOnlyList<LessonChange> changes = LessonChangeDetector.DetectChanges([previous], [current]);
 
@@ -67,10 +67,10 @@ public class LessonChangeDetectorTests
     [Fact]
     public void DetectChanges_SubstitutionDisappears_ReturnsTeacherSubstitutionWithdrawn()
     {
-        const int previousTeacherId = 2;
-        const int newTeacherId = 3;
-        var previous = TestLessons.Create(teachers: [newTeacherId], substitutedTeacherIds: [previousTeacherId]);
-        var current = TestLessons.Create(teachers: [previousTeacherId]);
+        const int PreviousTeacherId = 2;
+        const int NewTeacherId = 3;
+        var previous = TestLessons.Create(teachers: [NewTeacherId], substitutedTeacherIds: [PreviousTeacherId]);
+        var current = TestLessons.Create(teachers: [PreviousTeacherId]);
 
         IReadOnlyList<LessonChange> changes = LessonChangeDetector.DetectChanges([previous], [current]);
 
@@ -83,10 +83,10 @@ public class LessonChangeDetectorTests
     [Fact]
     public void DetectChanges_RoomChanged_ReturnsRoomChanged()
     {
-        const int previousRoomId = 2;
-        const int newRoomId = 3;
-        var previous = TestLessons.Create(rooms: [previousRoomId]);
-        var current = TestLessons.Create(rooms: [newRoomId]);
+        const int PreviousRoomId = 2;
+        const int NewRoomId = 3;
+        var previous = TestLessons.Create(rooms: [PreviousRoomId]);
+        var current = TestLessons.Create(rooms: [NewRoomId]);
 
         IReadOnlyList<LessonChange> changes = LessonChangeDetector.DetectChanges([previous], [current]);
 
@@ -99,13 +99,13 @@ public class LessonChangeDetectorTests
     [Fact]
     public void DetectChanges_RoomAndTeacherChanged_ReturnsTwoChanges()
     {
-        const int previousRoomId = 2;
-        const int newRoomId = 3;
-        const int previousTeacherId = 4;
-        const int newTeacherId = 5;
+        const int PreviousRoomId = 2;
+        const int NewRoomId = 3;
+        const int PreviousTeacherId = 4;
+        const int NewTeacherId = 5;
 
-        var previous = TestLessons.Create(rooms: [previousRoomId], teachers: [previousTeacherId]);
-        var current = TestLessons.Create(rooms: [newRoomId], teachers: [newTeacherId], substitutedTeacherIds: [previousTeacherId]);
+        var previous = TestLessons.Create(rooms: [PreviousRoomId], teachers: [PreviousTeacherId]);
+        var current = TestLessons.Create(rooms: [NewRoomId], teachers: [NewTeacherId], substitutedTeacherIds: [PreviousTeacherId]);
 
         IReadOnlyList<LessonChange> changes = LessonChangeDetector.DetectChanges([previous], [current]);
 
@@ -151,11 +151,11 @@ public class LessonChangeDetectorTests
     [Fact]
     public void DetectChanges_SubstitutionAlreadyPresent_ReturnsEmpty()
     {
-        const int previousTeacherId = 2;
-        const int newTeacherId = 3;
+        const int PreviousTeacherId = 2;
+        const int NewTeacherId = 3;
 
-        var previous = TestLessons.Create(teachers: [newTeacherId], substitutedTeacherIds: [previousTeacherId]);
-        var current = TestLessons.Create(teachers: [newTeacherId], substitutedTeacherIds: [previousTeacherId]);
+        var previous = TestLessons.Create(teachers: [NewTeacherId], substitutedTeacherIds: [PreviousTeacherId]);
+        var current = TestLessons.Create(teachers: [NewTeacherId], substitutedTeacherIds: [PreviousTeacherId]);
 
         IReadOnlyList<LessonChange> changes = LessonChangeDetector.DetectChanges([previous], [current]);
 
@@ -165,11 +165,11 @@ public class LessonChangeDetectorTests
     [Fact]
     public void DetectChanges_SameRoomsInDifferentOrder_ReturnsEmpty()
     {
-        const int roomA = 2;
-        const int roomB = 3;
+        const int RoomA = 2;
+        const int RoomB = 3;
 
-        var previous = TestLessons.Create(rooms: [roomA, roomB]);
-        var current = TestLessons.Create(rooms: [roomB, roomA]);
+        var previous = TestLessons.Create(rooms: [RoomA, RoomB]);
+        var current = TestLessons.Create(rooms: [RoomB, RoomA]);
 
         IReadOnlyList<LessonChange> changes = LessonChangeDetector.DetectChanges([previous], [current]);
 
@@ -304,12 +304,12 @@ public class LessonChangeDetectorTests
     [Fact]
     public void DetectChanges_TeacherSubstitutionChanged_ReturnsTeacherSubstitutionChanged()
     {
-        const int previousTeacherId = 2;
-        const int newTeacherId = 3;
-        const int anotherNewTeacherId = 4;
+        const int PreviousTeacherId = 2;
+        const int NewTeacherId = 3;
+        const int AnotherNewTeacherId = 4;
 
-        var previous = TestLessons.Create(teachers: [newTeacherId], substitutedTeacherIds: [previousTeacherId]);
-        var current = TestLessons.Create(teachers: [anotherNewTeacherId], substitutedTeacherIds: [previousTeacherId]);
+        var previous = TestLessons.Create(teachers: [NewTeacherId], substitutedTeacherIds: [PreviousTeacherId]);
+        var current = TestLessons.Create(teachers: [AnotherNewTeacherId], substitutedTeacherIds: [PreviousTeacherId]);
 
         IReadOnlyList<LessonChange> changes = LessonChangeDetector.DetectChanges([previous], [current]);
 
@@ -322,12 +322,12 @@ public class LessonChangeDetectorTests
     [Fact]
     public void DetectChanges_TeacherSubstitutionChangedButSameTeachers_ReturnsEmpty()
     {
-        const int previousTeacherId = 2;
-        const int newTeacherId = 3;
-        const int anotherNewTeacherId = 4;
+        const int PreviousTeacherId = 2;
+        const int NewTeacherId = 3;
+        const int AnotherNewTeacherId = 4;
 
-        var previous = TestLessons.Create(teachers: [newTeacherId, anotherNewTeacherId], substitutedTeacherIds: [previousTeacherId]);
-        var current = TestLessons.Create(teachers: [anotherNewTeacherId, newTeacherId], substitutedTeacherIds: [previousTeacherId]);
+        var previous = TestLessons.Create(teachers: [NewTeacherId, AnotherNewTeacherId], substitutedTeacherIds: [PreviousTeacherId]);
+        var current = TestLessons.Create(teachers: [AnotherNewTeacherId, NewTeacherId], substitutedTeacherIds: [PreviousTeacherId]);
 
         IReadOnlyList<LessonChange> changes = LessonChangeDetector.DetectChanges([previous], [current]);
 

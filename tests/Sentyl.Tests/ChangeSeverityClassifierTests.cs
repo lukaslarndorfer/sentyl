@@ -61,7 +61,7 @@ public class ChangeSeverityClassifierTests
         var fakeTime = CreateFakeTimeProvider(now);
 
         var lesson = TestLessons.Create();
-        var change = new LessonChange((LessonChangeType)999, lesson, lesson);
+        var change = new LessonChange((LessonChangeType) 999, lesson, lesson);
         Assert.Throws<ArgumentOutOfRangeException>(() => ChangeSeverityClassifier.Classify(change, fakeTime));
     }
 

@@ -14,8 +14,8 @@ public sealed class UntisClient : ITimetableProvider
     private AuthenticateResult? _authenticationState;
 
     // JsonSerializerDefaults.Web for camel case
-    private static readonly JsonSerializerOptions SerializerOptions = new(JsonSerializerDefaults.Web);
-    private static readonly EmptyParams NoParams = new();
+    private static readonly JsonSerializerOptions serializerOptions = new(JsonSerializerDefaults.Web);
+    private static readonly EmptyParams noParams = new();
 
     public UntisClient(HttpClient httpClient, IOptions<UntisOptions> options)
     {
@@ -29,12 +29,12 @@ public sealed class UntisClient : ITimetableProvider
         JsonRpcRequest<TParams> request = new("1", method, parameters);
 
         using HttpResponseMessage response =
-        await _httpClient.PostAsJsonAsync(_baseUrl, request, SerializerOptions, cancellationToken);
+        await _httpClient.PostAsJsonAsync(_baseUrl, request, serializerOptions, cancellationToken);
 
         // throws on 4xx or 5xx
         response.EnsureSuccessStatusCode();
 
-        JsonRpcResponse<TResult>? content = await response.Content.ReadFromJsonAsync<JsonRpcResponse<TResult>>(SerializerOptions, cancellationToken)
+        JsonRpcResponse<TResult>? content = await response.Content.ReadFromJsonAsync<JsonRpcResponse<TResult>>(serializerOptions, cancellationToken)
         ?? throw new UntisClientException("Content is null");
         if (content.Error != null)
         {
@@ -81,14 +81,14 @@ public sealed class UntisClient : ITimetableProvider
     }
 
     public Task<List<SchoolClass>> GetSchoolClassesAsync(CancellationToken cancellationToken)
-        => CallAuthenticatedAsync<EmptyParams, List<SchoolClass>>("getKlassen", NoParams, cancellationToken);
+        => CallAuthenticatedAsync<EmptyParams, List<SchoolClass>>("getKlassen", noParams, cancellationToken);
 
     public Task<List<Teacher>> GetTeachersAsync(CancellationToken cancellationToken)
-        => CallAuthenticatedAsync<EmptyParams, List<Teacher>>("getTeachers", NoParams, cancellationToken);
+        => CallAuthenticatedAsync<EmptyParams, List<Teacher>>("getTeachers", noParams, cancellationToken);
 
     public Task<List<Subject>> GetSubjectsAsync(CancellationToken cancellationToken)
-        => CallAuthenticatedAsync<EmptyParams, List<Subject>>("getSubjects", NoParams, cancellationToken);
+        => CallAuthenticatedAsync<EmptyParams, List<Subject>>("getSubjects", noParams, cancellationToken);
 
     public Task<List<Room>> GetRoomsAsync(CancellationToken cancellationToken)
-        => CallAuthenticatedAsync<EmptyParams, List<Room>>("getRooms", NoParams, cancellationToken);
+        => CallAuthenticatedAsync<EmptyParams, List<Room>>("getRooms", noParams, cancellationToken);
 }

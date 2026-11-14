@@ -9,12 +9,12 @@ namespace Sentyl.Notifications.Discord;
 
 public class DiscordMessageFormatter(MasterData masterData)
 {
-    private static readonly CultureInfo FormatProvider = new("de-AT");
+    private static readonly CultureInfo formatProvider = new("de-AT");
 
     public string Format(LessonChangeGroup group)
     {
         var sb = new StringBuilder();
-        sb.AppendLine($"**{group.Date.ToString("ddd dd.MM.", FormatProvider)} – {group.Start.ToString("HH:mm", FormatProvider)}**");
+        sb.AppendLine($"**{group.Date.ToString("ddd dd.MM.", formatProvider)} – {group.Start.ToString("HH:mm", formatProvider)}**");
         foreach (var change in group.Changes)
         {
             switch (change.Type)
