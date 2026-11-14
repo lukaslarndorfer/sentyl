@@ -2,6 +2,10 @@ using System.Net;
 
 using Microsoft.Extensions.Options;
 
+using NetCord.Hosting.Gateway;
+using NetCord.Hosting.Services;
+using NetCord.Hosting.Services.ApplicationCommands;
+
 using Sentyl;
 using Sentyl.Discord;
 using Sentyl.Discord.Notifications;
@@ -47,6 +51,9 @@ builder.Services.AddHttpClient<UntisClient>()
 
 builder.Services.ConfigurePersistence(builder.Environment.IsDevelopment());
 
+builder.Services.AddDiscordGateway()
+       .AddApplicationCommands();
+
 builder.Services.AddTransient<MasterDataLoader>();
 builder.Services.AddTransient<TimetablePoller>();
 
@@ -59,6 +66,8 @@ builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddHostedService<Worker>();
 
 var host = builder.Build();
+
+host.AddModules(typeof(Program).Assembly);
 
 await host.MigrateDatabaseAsync();
 await host.RunAsync();
