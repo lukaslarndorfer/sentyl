@@ -2,18 +2,18 @@ namespace Sentyl.Timetable;
 
 public sealed class InMemoryTimetableStateStore : ITimetableStateStore
 {
-    private IReadOnlyList<Lesson>? _lessons;
+    private readonly Dictionary<ulong, IReadOnlyList<Lesson>> _states = [];
 
-    public Task<IReadOnlyList<Lesson>?> LoadAsync(CancellationToken cancellationToken)
+    public Task<IReadOnlyList<Lesson>?> LoadAsync(ulong guildId, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        return Task.FromResult(_lessons);
+        return Task.FromResult(_states.GetValueOrDefault(guildId));
     }
 
-    public Task SaveAsync(IReadOnlyList<Lesson> lessons, CancellationToken cancellationToken)
+    public Task SaveAsync(ulong guildId, IReadOnlyList<Lesson> lessons, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        _lessons = lessons;
+        _states[guildId] = lessons;
         return Task.CompletedTask;
     }
 }

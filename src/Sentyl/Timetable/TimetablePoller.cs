@@ -18,11 +18,11 @@ public sealed class TimetablePoller(
     INotificationSender notificationSender,
     TimeProvider timeProvider)
 {
-    public async Task PollOnceAsync(CancellationToken cancellationToken)
+    public async Task PollOnceAsync(ulong guildId, CancellationToken cancellationToken)
     {
         try
         {
-            var previousLessons = await timetableStateStore.LoadAsync(cancellationToken) ?? [];
+            var previousLessons = await timetableStateStore.LoadAsync(guildId, cancellationToken) ?? [];
 
             DateOnly today = DateOnly.FromDateTime(DateTime.Now);
             DateOnly start = today;
@@ -40,7 +40,7 @@ public sealed class TimetablePoller(
                 await notificationSender.SendAsync(group, cancellationToken);
             }
 
-            await timetableStateStore.SaveAsync(current, cancellationToken);
+            await timetableStateStore.SaveAsync(guildId, current, cancellationToken);
         }
         catch (Exception ex) when (ex is HttpRequestException or UntisClientException or TimeoutRejectedException or RestException) // unexpected errors should still stop execution
         {

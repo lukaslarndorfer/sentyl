@@ -13,6 +13,8 @@ namespace Sentyl.Tests;
 
 public class TimetablePollerTests
 {
+    private const ulong GuildId = 1;
+
     [Fact]
     public async Task PollOnceAsync_WhenStateIsEmpty_DoesNotSendNotification()
     {
@@ -43,8 +45,8 @@ public class TimetablePollerTests
             notificationSender,
             new FakeTimeProvider());
 
-        await timetablePoller.PollOnceAsync(CancellationToken.None);
-        var stored = await timetableStateStore.LoadAsync(CancellationToken.None);
+        await timetablePoller.PollOnceAsync(GuildId, CancellationToken.None);
+        var stored = await timetableStateStore.LoadAsync(GuildId, CancellationToken.None);
 
         notificationSender.SentGroups.Should().BeEmpty();
         stored.Should().NotBeNull();
@@ -93,9 +95,10 @@ public class TimetablePollerTests
             new FakeTimeProvider());
 
         await timetableStateStore.SaveAsync(
+            GuildId,
             [regularEntry.ToLesson()],
             CancellationToken.None);
-        await timetablePoller.PollOnceAsync(CancellationToken.None);
+        await timetablePoller.PollOnceAsync(GuildId, CancellationToken.None);
 
         var group = notificationSender.SentGroups.Should().ContainSingle().Subject;
         var change = group.Changes.Should().ContainSingle().Subject;
@@ -134,13 +137,14 @@ public class TimetablePollerTests
             new FakeTimeProvider());
 
         await timetableStateStore.SaveAsync(
+            GuildId,
             [regularEntry.ToLesson()],
             CancellationToken.None);
         await Assert.ThrowsAsync<InvalidOperationException>(
-            () => timetablePoller.PollOnceAsync(CancellationToken.None));
+            () => timetablePoller.PollOnceAsync(GuildId, CancellationToken.None));
 
         // previous state must remain unchanged when notification sending fails
-        var stored = await timetableStateStore.LoadAsync(CancellationToken.None);
+        var stored = await timetableStateStore.LoadAsync(GuildId, CancellationToken.None);
         stored.Should().ContainSingle().Subject.Status.Should().Be(LessonStatus.Regular);
     }
 }

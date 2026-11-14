@@ -16,7 +16,7 @@ public class Worker(
         // first run right away, then every interval
         do
         {
-            await timetablePoller.PollOnceAsync(stoppingToken);
+            await timetablePoller.PollOnceAsync(1, stoppingToken);
         } while (await timer.WaitForNextTickAsync(stoppingToken));
     }
 }
