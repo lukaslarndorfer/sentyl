@@ -44,7 +44,7 @@ builder.Services.AddSingleton(serviceProvider =>
     return UntisCredentials.Create(options.Host, options.School, options.User, options.Password);
 });
 
-builder.Services.AddHttpClient<UntisClient>()
+builder.Services.AddHttpClient(UntisClientFactory.HttpClientName)
        .ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler
        {
            UseCookies = false,
@@ -61,11 +61,14 @@ builder.Services.AddDiscordGateway()
 builder.Services.AddTransient<MasterDataLoader>();
 builder.Services.AddTransient<TimetablePoller>();
 
-builder.Services.AddSingleton<ITimetableProvider, UntisClient>();
 builder.Services.AddSingleton<INotificationSender, DiscordNotificationSender>();
 builder.Services.AddSingleton<ITimetableStateStore, DatabaseTimetableStateStore>();
 builder.Services.AddSingleton<MasterDataProvider>();
 builder.Services.AddSingleton(TimeProvider.System);
+builder.Services.AddSingleton<IUntisClientFactory, UntisClientFactory>();
+builder.Services.AddSingleton(sp => sp.GetRequiredService<IUntisClientFactory>()
+                                      .Create(sp.GetRequiredService<UntisCredentials>()));
+builder.Services.AddSingleton<ITimetableProvider>(sp => sp.GetRequiredService<UntisClient>());
 
 builder.Services.AddHostedService<Worker>();
 
