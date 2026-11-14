@@ -1,5 +1,7 @@
 using Microsoft.Extensions.Options;
 
+using NetCord;
+
 using NetCord.Rest;
 
 using Sentyl.ChangeDetection;
@@ -16,9 +18,11 @@ public sealed class DiscordNotificationSender(
         bool isPing = group.Severity == NotificationSeverity.Ping;
         MasterData masterData = await masterDataProvider.GetAsync(cancellationToken);
 
-        using var webhookClient = new WebhookClient(ulong.Parse(options.Value.WebhookId), options.Value.WebhookToken);
+        using var client = new RestClient(new BotToken(options.Value.BotToken));
 
-        await webhookClient.ExecuteAsync(new WebhookMessageProperties
+        await client.SendMessageAsync(
+        options.Value.ChannelId,
+        new MessageProperties
         {
             Content = BuildContent(group, masterData, isPing),
             AllowedMentions = BuildAllowedMentions(isPing)

@@ -6,6 +6,6 @@ public sealed class DiscordOptions
 {
     public const string SectionName = "Discord";
 
-    [Required] public string WebhookId { get; set; } = "";
-    [Required] public string WebhookToken { get; set; } = "";
+    [Required] public ulong ChannelId { get; set; }
+    [Required] public string BotToken { get; set; } = "";
 }
