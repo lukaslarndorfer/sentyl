@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Options;
 using NetCord.Hosting.Gateway;
 using NetCord.Hosting.Services;
@@ -7,11 +8,15 @@ using Sentyl.Discord;
 using Sentyl.Discord.Notifications;
 using Sentyl.Notifications;
 using Sentyl.Persistence;
+using Sentyl.Security;
 using Sentyl.Timetable;
 using Sentyl.Untis;
 using Sentyl.Untis.Client;
 
 var builder = Host.CreateApplicationBuilder(args);
+
+string keysPath = builder.Configuration[$"{StorageOptions.SectionName}:{nameof(StorageOptions.KeysPath)}"]
+                  ?? throw new InvalidOperationException("Storage:KeysPath is not configured");
 
 builder.Services
        .AddOptions<UntisOptions>()
@@ -59,6 +64,11 @@ builder.Services.ConfigurePersistence(builder.Environment.IsDevelopment());
 builder.Services.AddDiscordGateway()
        .AddApplicationCommands();
 
+builder.Services
+       .AddDataProtection()
+       .SetApplicationName("Sentyl")
+       .PersistKeysToFileSystem(new DirectoryInfo(keysPath));
+
 builder.Services.AddTransient<MasterDataLoader>();
 builder.Services.AddTransient<TimetablePoller>();
 
@@ -68,6 +78,7 @@ builder.Services.AddSingleton<MasterDataProvider>();
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddSingleton<IUntisClientFactory, UntisClientFactory>();
 builder.Services.AddSingleton<IUntisCredentialsValidator, UntisCredentialsValidator>();
+builder.Services.AddSingleton<ISecretProtector, DataProtectionSecretProtector>();
 builder.Services.AddSingleton(sp => sp.GetRequiredService<IUntisClientFactory>()
                                       .Create(sp.GetRequiredService<UntisCredentials>()));
 builder.Services.AddSingleton<ITimetableProvider>(sp => sp.GetRequiredService<UntisClient>());

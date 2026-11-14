@@ -6,5 +6,9 @@ public sealed class StorageOptions
 {
     public const string SectionName = "Storage";
 
-    [Required] public string DatabasePath { get; set; } = "";
+    [Required]
+    public string DatabasePath { get; set; } = "";
+
+    [Required]
+    public string KeysPath { get; set; } = "";
 }
